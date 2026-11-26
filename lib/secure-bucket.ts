@@ -19,7 +19,7 @@ export class SecureBucket extends Construct {
       encryptionKey: key,
       bucketKeyEnabled: true,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-      enforceSSL: false,
+      enforceSSL: true,
       versioned: true,
       removalPolicy: RemovalPolicy.RETAIN,
     });

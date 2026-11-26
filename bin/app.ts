@@ -7,4 +7,4 @@ const billing = new Stack(app, 'TeamBilling');
 new SecureBucket(billing, 'Default');
 
 const reporting = new Stack(app, 'TeamReporting');
-new SecureBucket(reporting, 'ReportingStorage');
+new SecureBucket(reporting, 'ReportingStorage', { eventBridgeEnabled: true });

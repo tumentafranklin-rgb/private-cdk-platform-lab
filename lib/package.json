@@ -1,0 +1,14 @@
+{
+  "name": "@tumentafranklin-rgb/secure-bucket",
+  "version": "1.1.0",
+  "private": true,
+  "main": "dist/secure-bucket.js",
+  "types": "dist/secure-bucket.d.ts",
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0"
+  }
+}

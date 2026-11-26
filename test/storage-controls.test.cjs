@@ -57,3 +57,33 @@ for (const stack of ['TeamBilling', 'TeamReporting']) {
     }
   });
 }
+
+test('only Reporting opts in to EventBridge with bucket-scoped S3 permission', () => {
+  const load = stack => Template.fromJSON(
+    JSON.parse(readFileSync(`cdk.out/${stack}.template.json`, 'utf8'))
+  );
+
+  const billing = load('TeamBilling');
+  const reporting = load('TeamReporting');
+  const [bucketId] = Object.keys(reporting.findResources('AWS::S3::Bucket'));
+
+  billing.resourceCountIs('Custom::S3BucketNotifications', 0);
+  reporting.resourceCountIs('Custom::S3BucketNotifications', 1);
+
+  reporting.hasResourceProperties('Custom::S3BucketNotifications', {
+    BucketName: { Ref: bucketId },
+    NotificationConfiguration: {
+      EventBridgeConfiguration: {},
+    },
+  });
+
+  reporting.hasResourceProperties('AWS::IAM::Policy', {
+    PolicyDocument: {
+      Statement: Match.exact([{
+        Effect: 'Allow',
+        Action: 's3:PutBucketNotification',
+        Resource: { 'Fn::GetAtt': [bucketId, 'Arn'] },
+      }]),
+    },
+  });
+});
